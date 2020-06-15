@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+
+  <xacro:macro name="objects"/>
+  <xacro:property name="height1" value="1.2" />
+  <xacro:property name="height2" value="0.5" />
+  <xacro:property name="width" value="0.2" />
+  <xacro:property name="mass" value="0.1" />
+
+
+<link name="world"/>
+
+
+<!--   ##########                 GROUND              ##########                   -->
+  <joint name="ground" type="fixed">
+    <parent link="world"/>
+    <child link="ground_link"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi}" />
+  </joint>
+  
+  <link name="ground_link">
+  <!--   <collision>
+      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ur5_robot/objects/models/Ground.dae"/>
+      </geometry>
+    </collision> -->
+    
+    <visual>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ur5_robot/objects/models/Ground.dae"/>
+      </geometry>
+    </visual>
+    
+    <inertial>
+      <origin xyz="0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="0.5" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+    </inertial>
+  </link>
+
+
+<!--   ##########                 TABLE              ##########                   -->
+  <joint name="table" type="fixed">
+    <parent link="world"/>
+    <child link="table_link"/>
+    <origin xyz="0.0 0.0 1.0" rpy="${pi/2} 0.0 0.0" />
+  </joint>
+  
+  <link name="table_link">
+    <collision>
+      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ur5_robot/objects/models/Table.dae"/>
+      </geometry>
+    </collision>
+    
+    <visual>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ur5_robot/objects/models/Table.dae"/>
+      </geometry>
+    </visual>
+    
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="20"/>
+      <inertia
+        ixx="1.0" ixy="0.0" ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0"/>
+    </inertial>
+  </link>
+
+
+<!--     ##########        KINECT        ##########            -->
+  <!--<joint name="fixed2" type="fixed">
+   <parent link="world"/>
+    <parent link="world"/>
+    <child link="kinect_link"/> 
+    <origin xyz="0 0 0." rpy="0 0 ${pi/2}"/>
+  </joint>-->
+<joint name="kinect_joint" type="fixed">
+    <parent link="wrist_3_link" />
+    <child link = "kinect_link" />
+   <!-- <origin xyz="0 0 2.9" rpy="${pi/2} 0 ${pi/2}"/>-->
+   <!-- <origin xyz="-1.0 0 2.9" rpy="${-pi/2} 0 ${-pi/2}"/>-->
+<origin xyz="0 0 0" rpy="0 0 0 "/>
+  </joint>
+   <!-- Kinect Link -->
+  <link name="kinect_link">
+   <!-- <collision>
+      <origin xyz="0 0.12 0.18" rpy="0 ${-pi/2} ${-pi/2}"/>
+      <geometry>
+          <mesh filename="package://ur5_robot/meshes/kinect.dae" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision> -->
+
+    <visual>
+    <origin xyz="-0.1 0 0" rpy="${-pi/2} ${-pi/2} ${pi/2}"/>
+      <geometry>
+          <mesh filename="package://ur5_robot/meshes/kinect.dae" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+
+    <inertial>
+    <origin xyz="-0.1 0 0" rpy="${-pi/2} ${-pi/2} ${pi/2}"/>
+      <mass value="${mass}"/>
+      <inertia
+	  ixx="${mass}" ixy="0.0" ixz="0.0"
+	  iyy="${mass}" iyz="0.0"
+	  izz="${mass}"/>
+    </inertial>
+  </link>
+  
+
+  <link name="kinect_optical_link">
+
+  </link>
+  
+  <joint name="optical_joint" type="fixed">
+    <parent link="kinect_link"/>
+    <child link="kinect_optical_link"/>
+    <origin xyz="0.01 0.02 0" rpy="0 ${-pi/2} ${pi/2}"/>
+  </joint>
+  
+  <material name="orange">
+    <color rgba="${255/255} ${108/255} ${10/255} 1.0"/>
+  </material>
+    <gazebo reference="kinect_optical_link">
+    <sensor type="depth" name="kinect_depth_sensor">
+        <always_on>true</always_on>
+        <horizontal_fov> ${91.2*3.14/180} </horizontal_fov>
+        <vertical_fov> ${65.5*3.14/180} </vertical_fov>
+        <diagonal_fov> ${100.6*3.14/180} </diagonal_fov>
+        <update_rate>6.0</update_rate>
+        <camera>
+            
+          <image>
+            <format>R8G8B8</format>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>4.0</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+        </camera>
+        <plugin name="kinect_frame_controller" filename="libgazebo_ros_openni_kinect.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>6.0</updateRate>
+          <cameraName>kinect</cameraName>
+          <imageTopicName>color/image_raw</imageTopicName>
+          <depthImageTopicName>depth/image_rect_raw</depthImageTopicName>
+          <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
+          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>depth_registered/points</pointCloudTopicName>
+          <frameName>kinect_link</frameName>
+          <pointCloudCutoff>0.05</pointCloudCutoff>
+          <rangeMax>8.0</rangeMax>
+        </plugin>
+      </sensor>
+  </gazebo>
+    
+</robot>

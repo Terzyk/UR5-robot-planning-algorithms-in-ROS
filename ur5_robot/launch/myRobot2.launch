@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="model" default="$(find ur5_robot)/urdf/myRobot.urdf.xacro"/>
+<!--<arg name="model_object" default="$(find ur5_robot)/urdf/myObject.urdf.xacro"/>-->
+ 
+  <arg name="rvizconfig" default="$(find ur5_robot)/rviz/myRobot.rviz" />
+  <arg name="limited" default="false"/>
+  <arg name="paused" default="false"/>
+  <arg name="gui" default="true"/>
+  <arg name="sim" default="true"/>
+  
+  <arg name="use_sim_time" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="verbose" default="false"/>
+  <arg name="world_name" default="worlds/empty.world"/>
+  <!-- startup simulated world -->
+  <!-- Start gazebo and load the world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="$(arg headless)"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="verbose" value="$(arg verbose)"/>
+    <arg name="world_name" value="$(arg world_name)"/>
+  </include>
+  
+
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+  
+  <!--<param name="object_description" command="$(find xacro)/xacro $(arg model_object)" />-->
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+    
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_gazebo_robot_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -z 0.0" respawn="false" output="screen" />
+  
+<!--  <node name="spawn_gazebo_object_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param object_description -model object -z 2.45 -x 0.2 -y 0.3" respawn="false" output="screen" />-->
+
+
+  
+  <!--<node name="object_tf_publisher" pkg="ur5_robot" type="publish_object_state.py"/>-->
+<!-- Octomap -->
+	<node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+		<param name="resolution" value="0.25" /><!-- 0.05 -->
+		
+		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
+		<param name="frame_id" type="string" value="world" />
+		
+		<!-- maximum range to integrate (speedup!) -->
+		<param name="sensor_model/max_range" value="2.0" /> <!-- 5.0 -->
+		
+		<!-- data source to integrate (PointCloud2) -->
+		<remap from="cloud_in" to="/kinect/depth_registered/points" />
+	
+	</node>
+  
+    <!-- Fake Calibration -->
+  <node pkg="rostopic" type="rostopic" name="fake_joint_calibration"
+        args="pub /calibrated std_msgs/Bool true" />
+  
+  <!-- joint_state_controller -->
+  <rosparam file="$(find ur_gazebo)/controller/joint_state_controller.yaml" command="load"/>
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_state_controller" respawn="false" output="screen"/>
+
+  <!-- start this controller -->
+  <rosparam file="$(find ur_gazebo)/controller/arm_controller_ur5.yaml" command="load"/>
+  <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn arm_controller" respawn="false" output="screen"/>
+
+  <!-- load other controllers -->
+ <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load joint_group_position_controller" />
+ 
+<node pkg="tf" type="static_transform_publisher" name="tabletarget" args="0.25 -0.25 0.75 0.0 1.0 1.0 0.0 table_link target 1000" />
+<node pkg="tf" type="static_transform_publisher" name="maptf" args="0.0 0.0 0.0 0.0 0.0 0.0.0 world map 1000" />
+<node pkg="tf" type="static_transform_publisher" name="grippertf" args="0.0 0.0 0.46 0.0 1.0 0.0 0.0 wrist_3_link gripper 1000" />
+
+<node name="tf_transformation" pkg="ur5_robot" type="tf_transformation.py" output="screen" respawn="false" />
+
+
+
+
+
+
+</launch>
