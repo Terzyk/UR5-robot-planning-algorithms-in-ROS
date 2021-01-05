@@ -23,12 +23,12 @@ Workplace was created in Blender. Creating your own workstation in ROS is simple
 3. Create urdf.xacro file for your station - you can see how have i done it in */ur5_robot/urdf/myObject.urdf.xacro*.
 4. Load your station to your launch file. 
 
-**2. RRT and A* algorithms*  
+**2. RRT and A* algorithms**  
 
-RRT(Rapidly-exploring random tree) is a single query planner that grows a tree of states connected by valid motions. 
+**RRT**(Rapidly-exploring random tree) is a single query planner that grows a tree of states connected by valid motions. 
 ![alt text](http://kovan.ceng.metu.edu.tr/~asil/old/_1./hw4_files/Screen%20shot%202010-04-18%20at%2003.29.19.jpg)
 
-A* - is a graph traversal and path search algorithm, which is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency.  
+**A*** - is a graph traversal and path search algorithm, which is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency.  
 ![alt text](https://www.101computing.net/wp/wp-content/uploads/A-Star-Search-Algorithm.png)
 
 
