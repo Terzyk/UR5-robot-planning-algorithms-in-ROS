@@ -1,5 +1,4 @@
-# Project-MIAPR
-**Implementation of RRT and A* path planning algorithms for UR5 robot arm model**  
+##**Implementation of RRT and A* path planning algorithms for UR5 robot arm model**  
 
 Aim of the project was to create robotic station in which robotic arm will try to move on the surfaces of the objects. Robot knows where objects are, because it has a Kinect sensor attached to his arm. So let's start from beggining:
 
