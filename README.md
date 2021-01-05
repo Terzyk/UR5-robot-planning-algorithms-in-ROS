@@ -23,8 +23,8 @@ Workplace was created in Blender. Creating your own workstation in ROS is simple
 3. Create urdf.xacro file for your station - you can see how have i done it in */ur5_robot/urdf/myObject.urdf.xacro*.
 4. Load your station to your launch file. 
 
-You can see how my station looks like below:
-![alt text](https://github.com/[Terzyk]/[Projekt-MIAPR]/blob/[develop]/ur5_1.png?raw=true)
+You can see how my station looks like below:  
+![alt text](https://github.com/[Terzyk]/[Projekt-MIAPR]/blob/[develop]/ur5_1.png)
 
 **2. RRT and A* algorithms:*  
 
