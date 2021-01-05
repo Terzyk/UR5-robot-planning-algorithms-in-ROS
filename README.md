@@ -1,5 +1,5 @@
 # Project-MIAPR
-**Implementation of RRT and A* path planning algorithms for UR5 robot arm model**  
+**Implementation of RRT and A* path planning algorithms for UR5 robot arm model*  
 
 Aim of the project was to create robotic station in which robotic arm will try to move on the surfaces of the objects. Robot knows where objects are, because it has a Kinect sensor attached to his arm. So let's start from beggining:
 
@@ -32,7 +32,9 @@ You can see how my station looks like below:
 ![alt text](http://kovan.ceng.metu.edu.tr/~asil/old/_1./hw4_files/Screen%20shot%202010-04-18%20at%2003.29.19.jpg)
 
 **A*** - is a graph traversal and path search algorithm, which is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency.  
-![alt text](https://www.101computing.net/wp/wp-content/uploads/A-Star-Search-Algorithm.png)
+![alt text](https://www.101computing.net/wp/wp-content/uploads/A-Star-Search-Algorithm.png)  
+
+Main files where we stored our code are in *ur5_robot/scripts* catalog
 
 
 **3. View frames:**  
