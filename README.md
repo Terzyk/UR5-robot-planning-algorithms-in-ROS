@@ -1,5 +1,5 @@
 # Project-MIAPR
-**Implementation of RRT and A* path planning algorithms for UR5 robot arm model*  
+**Implementation of RRT and A* path planning algorithms for UR5 robot arm model**  
 
 Aim of the project was to create robotic station in which robotic arm will try to move on the surfaces of the objects. Robot knows where objects are, because it has a Kinect sensor attached to his arm. So let's start from beggining:
 
@@ -26,7 +26,7 @@ Workplace was created in Blender. Creating your own workstation in ROS is simple
 You can see how my station looks like below:  
 ![Screenshot](ur5_1.png)
 
-**2. RRT and A* algorithms:*  
+**2. RRT and A* algorithms:**  
 
 **RRT**(Rapidly-exploring random tree) is a single query planner that grows a tree of states connected by valid motions. 
 ![alt text](http://kovan.ceng.metu.edu.tr/~asil/old/_1./hw4_files/Screen%20shot%202010-04-18%20at%2003.29.19.jpg)
