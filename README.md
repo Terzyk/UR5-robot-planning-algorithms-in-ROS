@@ -25,6 +25,7 @@ Workplace was created in Blender. Creating your own workstation in ROS is simple
 
 You can see how my station looks like below:  
 ![Alt text](Projekt-MIAPR/ur5_1.png ?raw=true "Station")
+![Screenshot](ur5_1.png)
 
 **2. RRT and A* algorithms:*  
 
